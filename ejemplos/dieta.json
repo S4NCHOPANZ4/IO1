@@ -1,0 +1,9 @@
+{"titulo": "Dieta de bovinos de ceba (caso real)", "metodo": "grafico", "tipo": "min", "n": 2, "m": 4,
+ "nombre_z": "Costo de la dieta", "unidad_z": "COP por novillo al día",
+ "vars": [{"nombre": "Silo de maíz", "unidad": "kg fresco/novillo/día", "c": "600"},
+          {"nombre": "Torta de soya", "unidad": "kg fresco/novillo/día", "c": "3200"}],
+ "restr": [
+  {"nombre": "Proteína mínima", "unidad": "kg PC/día", "a": ["0,027625", "0,4004"], "signo": ">=", "b": "0,847"},
+  {"nombre": "Consumo mínimo", "unidad": "kg MS/día", "a": ["0,325", "0,88"], "signo": ">=", "b": "7,5"},
+  {"nombre": "Consumo máximo", "unidad": "kg MS/día", "a": ["0,325", "0,88"], "signo": "<=", "b": "8,5"},
+  {"nombre": "Tope de torta de soya (15 % de la MS)", "unidad": "kg MS/día", "a": ["-0,04875", "0,748"], "signo": "<=", "b": "0"}]}

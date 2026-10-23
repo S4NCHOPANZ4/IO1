@@ -1,0 +1,7 @@
+<div class="resumen">
+{% if z %}{% for l in lineas %}<div class="dato"><small>Valor óptimo</small><b>{{ l }}</b></div>{% endfor %}
+<div class="dato grande"><small>Resultado</small><b>{{ z }}</b></div>{% endif %}
+</div>
+<form method="post" action="{{ url_for('cambiar_tamano') }}" class="acciones" id="volver">
+<a href="{{ url_for('inicio') }}" class="btn-sec" style="text-decoration:none">Nuevo problema</a>
+</form>

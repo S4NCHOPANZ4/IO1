@@ -1,0 +1,41 @@
+{% extends "base.html" %}{% block titulo %}Datos{% endblock %}
+{% block contenido %}
+{% if errores %}<section class="alerta alerta-error" role="alert"><b>Revisa estos datos antes de resolver</b><ul>{% for e in errores %}<li>{{ e }}</li>{% endfor %}</ul></section>{% endif %}
+{% if titulo %}<span class="chip">Ejemplo cargado: {{ titulo }}</span>{% endif %}
+<form method="post" action="{{ url_for('resolver') }}" class="tarjeta" novalidate>
+<input type="hidden" name="n" value="{{ d.n }}"><input type="hidden" name="m" value="{{ d.m }}"><input type="hidden" name="titulo" value="{{ titulo or '' }}">
+<div class="fila-opciones">
+ <fieldset><legend>Método</legend>
+  <label class="pill"><input type="radio" name="metodo" value="grafico" {{ 'checked' if d.metodo == 'grafico' }}><span>Gráfico</span></label>
+  <label class="pill"><input type="radio" name="metodo" value="gran_m" {{ 'checked' if d.metodo == 'gran_m' }}><span>Gran M</span></label></fieldset>
+ <fieldset><legend>Objetivo</legend>
+  <label class="pill"><input type="radio" name="tipo" value="max" {{ 'checked' if d.tipo == 'max' }}><span>Maximizar</span></label>
+  <label class="pill"><input type="radio" name="tipo" value="min" {{ 'checked' if d.tipo == 'min' }}><span>Minimizar</span></label></fieldset>
+ <label class="campo" style="flex:1;min-width:200px">Qué se optimiza<input type="text" name="nombre_z" value="{{ d.nombre_z }}" placeholder="Costo de la dieta"></label>
+ <label class="campo" style="flex:1;min-width:200px">Unidad de z<input type="text" name="unidad_z" value="{{ d.unidad_z }}" placeholder="COP por día"></label>
+</div>
+<div class="tamano">
+ <label class="campo">Variables (1–{{ max_n }})<input type="number" name="nuevo_n" min="1" max="{{ max_n }}" value="{{ d.n }}"></label>
+ <label class="campo">Restricciones (1–{{ max_n }})<input type="number" name="nuevo_m" min="1" max="{{ max_n }}" value="{{ d.m }}"></label>
+ <button class="btn-sec" type="submit" formaction="{{ url_for('cambiar_tamano') }}">Cambiar tamaño</button>
+</div>
+<h2 class="sec">Variables de decisión</h2>
+<div class="tabla-scroll"><table><thead><tr><th>#</th><th>Nombre</th><th>Unidad</th><th class="n">Coeficiente en z</th></tr></thead><tbody>
+{% for v in d.vars %}{% set j = loop.index0 %}<tr><td>x{{ loop.index }}</td>
+<td><input type="text" name="v_nombre_{{ j }}" value="{{ v.nombre }}" placeholder="x{{ loop.index }}" aria-label="Nombre de x{{ loop.index }}"></td>
+<td><input type="text" name="v_unidad_{{ j }}" value="{{ v.unidad }}" aria-label="Unidad de x{{ loop.index }}"></td>
+<td><input class="num" type="text" inputmode="decimal" name="c_{{ j }}" value="{{ v.c }}" aria-label="Coeficiente de x{{ loop.index }} en z"></td></tr>{% endfor %}
+</tbody></table></div>
+<h2 class="sec">Restricciones</h2>
+<div class="tabla-scroll"><table><thead><tr><th>Nombre</th><th>Unidad</th>
+{% for v in d.vars %}<th class="n">{{ v.nombre or 'x' ~ loop.index }}</th>{% endfor %}<th>Signo</th><th class="n">Lado derecho</th></tr></thead><tbody>
+{% for r in d.restr %}{% set i = loop.index0 %}<tr>
+<td><input type="text" name="r_nombre_{{ i }}" value="{{ r.nombre }}" placeholder="Restricción {{ loop.index }}" aria-label="Nombre de la restricción {{ loop.index }}"></td>
+<td><input type="text" name="r_unidad_{{ i }}" value="{{ r.unidad }}" aria-label="Unidad de la restricción {{ loop.index }}"></td>
+{% for a in r.a %}<td><input class="num" type="text" inputmode="decimal" name="a_{{ i }}_{{ loop.index0 }}" value="{{ a }}" aria-label="Coeficiente {{ loop.index }} de la restricción {{ i + 1 }}"></td>{% endfor %}
+<td><select name="s_{{ i }}" aria-label="Signo de la restricción {{ i + 1 }}">{% for s, t in [('<=', '≤'), ('>=', '≥'), ('=', '=')] %}<option value="{{ s }}" {{ 'selected' if r.signo == s }}>{{ t }}</option>{% endfor %}</select></td>
+<td><input class="num" type="text" inputmode="decimal" name="b_{{ i }}" value="{{ r.b }}" aria-label="Lado derecho de la restricción {{ i + 1 }}"></td></tr>{% endfor %}
+</tbody></table></div>
+<div class="acciones"><button class="btn" type="submit">Resolver</button><span class="ayuda">El método gráfico exige exactamente 2 variables.</span></div>
+</form>
+{% endblock %}

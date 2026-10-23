@@ -1,0 +1,4 @@
+{"titulo": "Prueba 3 · no acotado", "metodo": "grafico", "tipo": "max", "n": 2, "m": 1,
+ "nombre_z": "z", "unidad_z": "",
+ "vars": [{"nombre": "x1", "unidad": "", "c": "1"}, {"nombre": "x2", "unidad": "", "c": "1"}],
+ "restr": [{"nombre": "Diferencia", "unidad": "", "a": ["1", "-1"], "signo": "<=", "b": "2"}]}

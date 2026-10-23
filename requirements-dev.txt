@@ -1,0 +1,3 @@
+-r requirements.txt
+pytest>=8.0
+scipy>=1.11   # solo para verificar resultados en las pruebas, no lo usa el motor

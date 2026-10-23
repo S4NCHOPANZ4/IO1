@@ -1,0 +1,7 @@
+{"titulo": "Prueba 1 · óptimos alternativos", "metodo": "grafico", "tipo": "max", "n": 2, "m": 3,
+ "nombre_z": "Ganancia", "unidad_z": "$",
+ "vars": [{"nombre": "Producto A", "unidad": "unidades", "c": "2"}, {"nombre": "Producto B", "unidad": "unidades", "c": "4"}],
+ "restr": [
+  {"nombre": "Recurso 1", "unidad": "horas", "a": ["1", "2"], "signo": "<=", "b": "8"},
+  {"nombre": "Demanda de A", "unidad": "unidades", "a": ["1", "0"], "signo": "<=", "b": "6"},
+  {"nombre": "Demanda de B", "unidad": "unidades", "a": ["0", "1"], "signo": "<=", "b": "3"}]}

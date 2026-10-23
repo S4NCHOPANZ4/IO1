@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% block titulo %}Resultado Gran M{% endblock %}
+{% block contenido %}
+<header><h1>Método de la Gran M</h1><p class="sub">{{ titulo or 'Problema ingresado' }} · {{ 'Maximizar' if p.tipo == 'max' else 'Minimizar' }} {{ p.nombre_z }} · {{ res.tablas|length }} tablas</p></header>
+{% with avisos=res.avisos %}{% include "_avisos.html" %}{% endwith %}
+{% include "_resumen.html" %}
+<h2 class="sec">Tablas por iteración</h2>
+{% for t in res.tablas %}
+<section class="tarjeta iter"><h3>{{ 'Tabla inicial' if t.n == 0 else 'Iteración ' ~ t.n }}{% if loop.last %} · tabla final{% endif %}</h3>
+{% if t.entra %}<div class="movs"><span class="mov">Entra <b>{{ t.entra }}</b></span>{% if t.sale %}<span class="mov">Sale <b>{{ t.sale }}</b></span><span class="mov">Pivote <b>{{ t.pivote|fmt }}</b></span>{% else %}<span class="mov">Sin fila pivote: no acotado</span>{% endif %}</div>{% endif %}
+<div class="tabla-scroll m"><table>
+<thead><tr><th>Base</th><th class="n">c<sub>B</sub></th>{% for nom in res.nombres %}<th class="n">{{ nom }}</th>{% endfor %}<th class="n">b</th><th class="n">Razón</th></tr></thead>
+<tbody>{% set ri = loop.index0 %}{% for fila in t.filas %}{% set i = loop.index0 %}<tr><td><b>{{ t.base[i] }}</b></td><td class="n">{{ t.cb[i]|fmt }}</td>
+{% for v in fila %}<td class="n {{ 'piv' if t.pos and t.pos[0] == i and t.pos[1] == loop.index0 }}">{{ v|fmt }}</td>{% endfor %}
+<td class="n">{{ t.b[i]|fmt }}</td><td class="n">{{ t.razones[i]|fmt if t.razones[i] is not none else '—' }}</td></tr>{% endfor %}
+<tr class="fz"><td>c<sub>j</sub> − z<sub>j</sub></td><td></td>{% for v in t.cz %}<td class="n">{{ v|fmt }}</td>{% endfor %}<td class="n">z = {{ t.z|fmt }}</td><td></td></tr>
+</tbody></table></div></section>
+{% endfor %}
+{% include "_sens.html" %}
+{% endblock %}

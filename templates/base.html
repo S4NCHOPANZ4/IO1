@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block titulo %}Optimizador{% endblock %} · IO1 Grupo 5</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}"></head>
+<body><div class="app">
+<aside class="lateral">
+  <a class="item" href="{{ url_for('inicio') }}"><span class="mini">+</span>Nuevo problema</a>
+  <h2>Ejemplos precargados</h2>
+  {% for id, nombre in ejemplos %}<a class="item" href="{{ url_for('ejemplo', nombre=id) }}"><span class="mini">{{ loop.index }}</span>{{ nombre }}</a>{% endfor %}
+</aside>
+<main class="principal">{% block contenido %}{% endblock %}</main>
+</div></body></html>

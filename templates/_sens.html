@@ -1,0 +1,20 @@
+{% if sens %}
+<h2 class="sec">Análisis de sensibilidad</h2>
+{% with avisos=sens.avisos %}{% include "_avisos.html" %}{% endwith %}
+<div class="tarjeta"><div class="tabla-scroll"><table>
+<thead><tr><th>Restricción</th><th class="n">b</th><th class="n">Precio sombra</th><th class="n">Holgura</th><th class="n">Rango de b</th>{% if grafico %}<th>Comprobación gráfica (Δz/Δb)</th>{% endif %}</tr></thead>
+<tbody>{% for f in sens.precios %}<tr>
+<td>{{ f.nombre }}{% if f.unidad %} <span class="ayuda">({{ f.unidad }})</span>{% endif %}</td><td class="n">{{ f.b|fmt }}</td><td class="n">{{ f.precio|fmt }}</td><td class="n">{{ f.holgura|fmt }}</td>
+<td class="n">[{{ f.lo|fmt if f.lo is not none else '−∞' }}; {{ f.hi|fmt if f.hi is not none else '∞' }}]</td>
+{% if grafico %}<td>{% if f.comprobacion %}{{ f.comprobacion[0]|fmt }} <span class="{{ 'ok' if f.comprobacion[1] else '' }}">{{ 'coincide' if f.comprobacion[1] else 'no coincide' }}</span>{% else %}<span class="ayuda">sin cambio de z</span>{% endif %}</td>{% endif %}
+</tr>{% endfor %}</tbody></table></div></div>
+<div class="tarjeta"><div class="tabla-scroll"><table>
+<thead><tr><th>Variable</th><th class="n">Valor</th><th class="n">c<sub>j</sub></th><th class="n">Costo reducido</th><th class="n">Rango de c<sub>j</sub></th></tr></thead>
+<tbody>{% for f in sens.cj %}<tr><td>{{ f.nombre }}</td><td class="n">{{ f.valor|fmt }}</td><td class="n">{{ f.c|fmt }}</td><td class="n">{{ f.reducido|fmt }}</td>
+<td class="n">[{{ f.lo|fmt if f.lo is not none else '−∞' }}; {{ f.hi|fmt if f.hi is not none else '∞' }}]</td></tr>{% endfor %}</tbody></table></div></div>
+<div class="tarjeta"><b>Qué significa para la decisión</b><ul class="frases">
+{% for f in sens.precios %}<li>{{ f.frase }}</li>{% endfor %}{% for f in sens.cj %}<li>{{ f.frase }}</li>{% endfor %}</ul></div>
+{% elif sens_msg %}
+<h2 class="sec">Análisis de sensibilidad</h2>
+<section class="alerta alerta-warn" role="status">{{ sens_msg }}</section>
+{% endif %}

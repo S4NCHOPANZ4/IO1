@@ -1,0 +1,1 @@
+{% for tipo, texto in avisos %}<section class="alerta alerta-{{ tipo }}" role="{{ 'alert' if tipo == 'error' else 'status' }}">{{ texto }}</section>{% endfor %}

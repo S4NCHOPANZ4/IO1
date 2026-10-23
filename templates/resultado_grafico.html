@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block titulo %}Resultado gráfico{% endblock %}
+{% block contenido %}
+<header><h1>Método gráfico</h1><p class="sub">{{ titulo or 'Problema ingresado' }} · {{ 'Maximizar' if p.tipo == 'max' else 'Minimizar' }} {{ p.nombre_z }}</p></header>
+{% with avisos=res.avisos %}{% include "_avisos.html" %}{% endwith %}
+{% with grafico=true %}{% include "_resumen.html" %}{% endwith %}
+<div class="tarjeta"><img class="grafica" alt="Región factible, vértices y óptimo" src="data:image/png;base64,{{ imagen }}"></div>
+{% if res.vertices %}
+<h2 class="sec">Vértices de la región factible</h2>
+<div class="tarjeta"><div class="tabla-scroll"><table>
+<thead><tr><th>Vértice</th><th>Restricciones activas</th><th class="n">{{ p.nombres[0] }}</th><th class="n">{{ p.nombres[1] }}</th><th class="n">z</th></tr></thead>
+<tbody>{% for v in res.vertices %}<tr class="{{ 'opt' if v.optimo }}"><td><b>{{ v.letra }}</b>{% if v.optimo %} <span class="insignia">óptimo</span>{% endif %}</td><td>{{ v.activas|join(', ') }}</td>
+<td class="n">{{ v.x|fmt(2) }}</td><td class="n">{{ v.y|fmt(2) }}</td><td class="n">{{ v.z|fmt(2) }}</td></tr>{% endfor %}</tbody></table></div></div>
+{% endif %}
+{% with grafico=true %}{% include "_sens.html" %}{% endwith %}
+{% endblock %}
