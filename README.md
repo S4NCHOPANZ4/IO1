@@ -22,9 +22,13 @@ pytest
 
 SciPy se usa solo en las pruebas, para comparar resultados. Si no está instalado, esas comparaciones se omiten.
 
+## Desplegar en Vercel
+
+Sube la carpeta a GitHub, impórtala en vercel.com y pulsa Deploy. Vercel detecta Flask solo. Con la CLI: `npm i -g vercel`, luego `vercel` (prueba) y `vercel --prod`.
+
 ## Carpetas
 
 - `motor/`: los métodos y la sensibilidad
-- `templates/` y `static/`: páginas y estilos
+- `templates/` y `public/`: páginas y estilos
 - `ejemplos/`: problemas en JSON
 - `tests/`: pruebas automáticas

@@ -422,6 +422,8 @@ def test_rutas_web():
     from app import app
     c = app.test_client()
     assert c.get("/").status_code == 200
+    css = c.get("/estilo.css")
+    assert css.status_code == 200 and b"--verde" in css.data and 'href="/estilo.css"' in c.get("/").get_data(as_text=True)
     for nombre in ["dieta", "prueba1_alternativos", "prueba2_infactible", "prueba3_no_acotado"]:
         assert c.get(f"/ejemplo/{nombre}").status_code == 200
     assert c.get("/ejemplo/no_existe").status_code == 404 and c.get("/ejemplo/..%2Fapp").status_code == 404

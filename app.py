@@ -2,14 +2,20 @@
 Esta capa no hace cálculos de programación lineal."""
 import json
 import os
+import tempfile
 
-from flask import Flask, abort, render_template, request
+# En Vercel el disco es de solo lectura: matplotlib necesita una carpeta temporal para su caché.
+os.environ.setdefault("MPLCONFIGDIR", os.path.join(tempfile.gettempdir(), "mplconfig"))
+
+from flask import Flask, abort, render_template, request, send_from_directory
 
 from motor import grafico, gran_m, sensibilidad
 from motor.modelo import fmt, moneda
 from motor.validacion import (MAX_N, completar, datos_desde_form, datos_vacios, parsear, redimensionar)
 
-app = Flask(__name__)
+# Los estáticos viven en public/ (Vercel los sirve desde su CDN; la ruta de abajo solo es para ejecutar en local).
+app = Flask(__name__, static_folder=None)
+PUBLIC = os.path.join(os.path.dirname(__file__), "public")
 app.jinja_env.filters["fmt"] = fmt
 app.jinja_env.filters["moneda"] = moneda
 EJEMPLOS = os.path.join(os.path.dirname(__file__), "ejemplos")
@@ -22,6 +28,11 @@ def lista_ejemplos():
             with open(os.path.join(EJEMPLOS, f), encoding="utf-8") as fh:
                 out.append((f[:-5], json.load(fh)["titulo"]))
     return out
+
+
+@app.get("/estilo.css")
+def estilo():
+    return send_from_directory(PUBLIC, "estilo.css")
 
 
 @app.context_processor
